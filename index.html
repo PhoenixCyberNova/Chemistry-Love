@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CBSE Class 10 Chemistry Reference</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <title>Chemistry Rocks | Class 10 NCERT Complete Reactions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,868 +13,1788 @@
         }
 
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
+            background: #05050f;
+            color: #e8e8f0;
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
-        /* Header Navigation */
-        header {
-            position: sticky;
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            background: radial-gradient(ellipse at 20% 20%, rgba(0, 180, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(255, 50, 150, 0.07) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(100, 0, 255, 0.05) 0%, transparent 60%);
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(5,5,15,0.75) 0%, rgba(5,5,15,0.92) 100%);
+            z-index: -2;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: rgba(0, 220, 255, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-20px) scale(1); opacity: 0; }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
             top: 0;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid #334155;
+            left: 0;
+            width: 72px;
+            height: 100vh;
+            background: rgba(8, 10, 25, 0.97);
+            border-right: 1px solid rgba(0, 200, 255, 0.25);
             z-index: 100;
-            padding: 15px 20px;
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            backdrop-filter: blur(16px);
         }
 
-        .nav-container {
-            max-width: 1100px;
-            margin: 0 auto;
+        .sidebar.expanded {
+            width: 290px;
+        }
+
+        .sidebar-toggle {
+            width: 72px;
+            height: 72px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .logo {
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: #38bdf8;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-
-        .tab-btn {
-            background: #1e293b;
-            color: #94a3b8;
-            border: 1px solid #334155;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 500;
+            justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            font-size: 1.9rem;
+            color: #00d4ff;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background: rgba(0, 200, 255, 0.1);
+            color: #fff;
+        }
+
+        .sidebar-menu {
+            padding: 12px 0;
+            opacity: 0;
+            transition: opacity 0.35s ease 0.1s;
+        }
+
+        .sidebar.expanded .sidebar-menu {
+            opacity: 1;
+        }
+
+        .nav-item {
+            padding: 16px 28px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #a0a0b8;
+            transition: all 0.25s ease;
             white-space: nowrap;
+            border-left: 4px solid transparent;
+            position: relative;
         }
 
-        .tab-btn:hover {
-            background: #334155;
+        .nav-item:hover {
+            background: rgba(0, 200, 255, 0.1);
             color: #fff;
         }
 
-        .tab-btn.active {
-            background: #0284c7;
-            color: #fff;
-            border-color: #38bdf8;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+        .nav-item.active {
+            background: rgba(0, 200, 255, 0.18);
+            color: #00d4ff;
+            border-left: 4px solid #00d4ff;
+            font-weight: 600;
         }
 
-        /* Main Container */
-        main {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px 60px;
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, rgba(0,212,255,0.15), transparent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover::after {
             width: 100%;
-            flex: 1;
         }
 
-        .tab-content {
+        /* Main content */
+        .main {
+            margin-left: 72px;
+            padding: 40px 24px 120px;
+            transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            justify-content: center;
+        }
+
+        .sidebar.expanded ~ .main {
+            margin-left: 290px;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .section {
             display: none;
-            animation: fadeIn 0.3s ease forwards;
+            opacity: 0;
         }
 
-        .tab-content.active {
+        .section.active {
             display: block;
+            animation: sectionFade 0.7s ease forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
+        @keyframes sectionFade {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #f1f5f9;
-            margin-bottom: 20px;
-            border-left: 4px solid #38bdf8;
-            padding-left: 12px;
+        /* Intro / Home section */
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.8rem, 7vw, 4.6rem);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 18px;
+            background: linear-gradient(90deg, #00f0ff, #ff00aa, #ffcc00, #00ff88, #00f0ff);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rgbFlow 6s linear infinite, titlePop 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: scale(0.7) translateY(30px);
         }
 
-        /* Card Layout for Reactions */
-        .card {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 18px 20px;
-            margin-bottom: 16px;
+        @keyframes titlePop {
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        .card-header {
+        @keyframes rgbFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .hero-subtitle {
+            text-align: center;
+            color: #8890a8;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.7s forwards;
+        }
+
+        .definition-box {
+            background: rgba(15, 20, 40, 0.7);
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            border-radius: 18px;
+            padding: 32px 36px;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: contentIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
+        }
+
+        .definition-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #00d4ff, #ff00aa);
+        }
+
+        .definition-box p {
+            font-size: 1.12rem;
+            line-height: 1.85;
+            color: #c8d0e8;
+            margin-bottom: 18px;
+        }
+
+        .definition-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            color: #00e5ff;
+            font-weight: 600;
+        }
+
+        /* Reaction cards */
+        .reaction-card {
+            background: rgba(12, 16, 35, 0.85);
+            border: 1px solid rgba(0, 180, 255, 0.18);
+            border-radius: 16px;
+            padding: 28px 30px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .reaction-card:hover {
+            border-color: rgba(0, 220, 255, 0.45);
+            box-shadow: 0 0 35px rgba(0, 180, 255, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .reaction-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 200, 255, 0.08), transparent);
+            transition: width 0.4s ease;
+        }
+
+        .reaction-card:hover::before {
+            width: 100%;
+        }
+
+        .reaction-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 14px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             gap: 10px;
-            margin-bottom: 10px;
         }
 
-        .reaction-name {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #e2e8f0;
-        }
-
-        .badge {
-            background: #0f172a;
-            color: #38bdf8;
-            border: 1px solid #0284c7;
-            font-size: 0.75rem;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .equation-box {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 12px 16px;
+        .reaction-eq {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1rem;
-            color: #f8fafc;
-            overflow-x: auto;
-            margin: 10px 0;
+            font-size: 1.18rem;
+            background: linear-gradient(90deg, #ff6b9d, #ffcc00, #00ffcc, #66aaff);
+            background-size: 250% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rgbFlow 8s linear infinite;
+            padding: 12px 0;
+            letter-spacing: 0.5px;
+            line-height: 1.6;
         }
 
-        .notes {
-            font-size: 0.875rem;
-            color: #94a3b8;
-            margin-top: 8px;
-            line-height: 1.5;
+        .reaction-desc {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #b0b8d0;
+            margin-top: 14px;
         }
 
-        /* Color Reference Table */
-        .color-table {
+        .type-tag {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-left: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-combination { background: rgba(0, 255, 150, 0.15); color: #00ff99; }
+        .tag-decomposition { background: rgba(255, 100, 100, 0.15); color: #ff6b6b; }
+        .tag-displacement { background: rgba(255, 200, 0, 0.15); color: #ffcc00; }
+        .tag-double { background: rgba(180, 100, 255, 0.15); color: #c080ff; }
+        .tag-redox { background: rgba(0, 200, 255, 0.15); color: #00d4ff; }
+        .tag-neutralisation { background: rgba(255, 120, 200, 0.15); color: #ff80c0; }
+
+        .section-heading {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #00f0ff, #ff00aa, #ffcc00, #00ff88);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rgbFlow 7s linear infinite;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: #8890a8;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00d4ff, #ff00aa, transparent);
+            margin: 40px 0;
+            opacity: 0.4;
+        }
+
+        /* Colour table styles will be in later parts */
+        .colour-table {
             width: 100%;
             border-collapse: collapse;
-            background: #1e293b;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #334155;
+            margin-top: 20px;
         }
 
-        .color-table th, .color-table td {
+        .colour-table th, .colour-table td {
             padding: 14px 18px;
             text-align: left;
-            border-bottom: 1px solid #334155;
-            font-size: 0.925rem;
+            border-bottom: 1px solid rgba(0, 180, 255, 0.15);
         }
 
-        .color-table th {
-            background: #0f172a;
-            color: #38bdf8;
+        .colour-table th {
+            background: rgba(0, 180, 255, 0.1);
+            color: #00d4ff;
             font-weight: 600;
         }
 
-        .color-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .color-swatch {
+        .colour-swatch {
             display: inline-block;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            margin-right: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
             vertical-align: middle;
+            margin-right: 10px;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .formula {
-            font-family: 'JetBrains Mono', monospace;
-            color: #38bdf8;
+        @keyframes contentIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 60px; }
+            .sidebar.expanded { width: 250px; }
+            .main { margin-left: 60px; padding: 30px 16px 100px; }
+            .sidebar.expanded ~ .main { margin-left: 250px; }
+            .reaction-eq { font-size: 1.02rem; }
         }
     </style>
 </head>
 <body>
+    <div class="bg-particles"></div>
+    <div class="overlay"></div>
 
-    <header>
-        <div class="nav-container">
-            <div class="logo">Class 10 Chemistry Reference</div>
-            <nav class="nav-tabs">
-                <button class="tab-btn active" onclick="switchTab('ch1')">Ch 1: Reactions</button>
-                <button class="tab-btn" onclick="switchTab('ch2')">Ch 2: Acids & Bases</button>
-                <button class="tab-btn" onclick="switchTab('ch3')">Ch 3: Metals</button>
-                <button class="tab-btn" onclick="switchTab('ch4')">Ch 4: Carbon</button>
-                <button class="tab-btn" onclick="switchTab('colors')">Colors & Compounds</button>
-            </nav>
+    <!-- Floating particles -->
+    <div class="particle" style="left:8%; animation-duration:18s; animation-delay:0s;"></div>
+    <div class="particle" style="left:22%; animation-duration:22s; animation-delay:3s;"></div>
+    <div class="particle" style="left:37%; animation-duration:16s; animation-delay:6s;"></div>
+    <div class="particle" style="left:51%; animation-duration:20s; animation-delay:1s;"></div>
+    <div class="particle" style="left:66%; animation-duration:19s; animation-delay:4s;"></div>
+    <div class="particle" style="left:79%; animation-duration:17s; animation-delay:7s;"></div>
+    <div class="particle" style="left:91%; animation-duration:21s; animation-delay:2s;"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
+        <div class="sidebar-menu">
+            <div class="nav-item active" onclick="showSection('home')">Home</div>
+            <div class="nav-item" onclick="showSection('ch1')">Ch 1 • Reactions</div>
+            <div class="nav-item" onclick="showSection('ch2')">Ch 2 • Acids & Bases</div>
+            <div class="nav-item" onclick="showSection('ch3')">Ch 3 • Metals</div>
+            <div class="nav-item" onclick="showSection('ch4')">Ch 4 • Carbon</div>
+            <div class="nav-item" onclick="showSection('colours')">Colours of Compounds</div>
         </div>
-    </header>
+    </div>
 
-    <main>
-        <!-- Chapter 1 -->
-        <div id="ch1" class="tab-content active">
-            <h2 class="section-title">Chapter 1: Chemical Reactions and Equations</h2>
+    <!-- Main Content -->
+    <div class="main">
+        <div class="content-wrapper">
 
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">1. Combustion of Magnesium Ribbon</span>
-                    <span class="badge">Combination</span>
+            <!-- HOME / INTRO SECTION -->
+            <div id="home" class="section active">
+                <h1 class="hero-title">Chemistry Rocks</h1>
+                <div class="hero-subtitle">Class 10 NCERT • Complete Reactions & Colours</div>
+
+                <div class="definition-box">
+                    <p>
+                        <span class="highlight">Chemistry</span> is the branch of science that deals with the study of matter, its composition, structure, properties, and the changes it undergoes during chemical reactions. It explores how atoms and molecules interact, rearrange, and form new substances.
+                    </p>
+                    <p>
+                        Chemistry is extremely important because it explains the world around us — from the food we eat and the air we breathe to medicines, fuels, plastics, and metals. Every material and process we use in daily life has a chemical basis. Understanding chemistry helps us invent new materials, solve environmental problems, develop medicines, and improve technology. In short, chemistry is the central science that connects physics, biology, and the real world.
+                    </p>
                 </div>
-                <div class="equation-box">2Mg(s) + O₂(g) → 2MgO(s)</div>
-                <div class="notes">Dazzling white flame. Forms white powder of Magnesium Oxide.</div>
+
+                <div class="divider"></div>
+
+                <p style="text-align:center; color:#8890a8; font-size:1.05rem; line-height:1.7;">
+                    Use the sidebar to explore every important balanced chemical equation from<br>
+                    <strong style="color:#00d4ff;">Chapters 1 – 4</strong> of Class 10 NCERT Science<br>
+                    along with a complete list of compounds and their colours.
+                </p>
+            </div>
+                        <!-- CHAPTER 1: Chemical Reactions and Equations -->
+            <div id="ch1" class="section">
+                <h1 class="section-heading">Chapter 1</h1>
+                <div class="section-sub">Chemical Reactions and Equations</div>
+
+                <!-- Combination Reactions -->
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Burning of Magnesium Ribbon
+                        <span class="type-tag tag-combination">Combination</span>
+                    </div>
+                    <div class="reaction-eq">2Mg(s) + O₂(g) → 2MgO(s)</div>
+                    <div class="reaction-desc">
+                        Magnesium ribbon burns with a dazzling white flame in air (or oxygen) to form magnesium oxide, a white powder. The ribbon is cleaned with sandpaper before burning to remove the oxide layer. This is a classic example of a combination reaction and also an oxidation reaction.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Formation of Slaked Lime
+                        <span class="type-tag tag-combination">Combination + Exothermic</span>
+                    </div>
+                    <div class="reaction-eq">CaO(s) + H₂O(l) → Ca(OH)₂(aq) + Heat</div>
+                    <div class="reaction-desc">
+                        Quick lime (calcium oxide) reacts vigorously with water to form slaked lime (calcium hydroxide) and a large amount of heat is released. This is an exothermic combination reaction. Slaked lime is used for whitewashing walls.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Whitewashing Reaction
+                        <span class="type-tag tag-combination">Combination</span>
+                    </div>
+                    <div class="reaction-eq">Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        When carbon dioxide from air reacts with the thin layer of slaked lime on walls, a shiny white layer of calcium carbonate is formed. This gives the walls a bright finish after 2–3 days. Marble also has the formula CaCO₃.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Combustion of Methane (Natural Gas)
+                        <span class="type-tag tag-combination">Combination + Exothermic</span>
+                    </div>
+                    <div class="reaction-eq">CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(g) + Heat</div>
+                    <div class="reaction-desc">
+                        Methane burns in excess of oxygen to form carbon dioxide and water vapour, releasing a large amount of heat. This is the reaction that occurs when natural gas is used as fuel.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Respiration (Biological Oxidation)
+                        <span class="type-tag tag-combination">Exothermic</span>
+                    </div>
+                    <div class="reaction-eq">C₆H₁₂O₆(aq) + 6O₂(aq) → 6CO₂(aq) + 6H₂O(l) + Energy</div>
+                    <div class="reaction-desc">
+                        Glucose present in our body is oxidised by oxygen to produce carbon dioxide, water and energy. Although this is a biological process, chemically it is similar to combustion and is highly exothermic. The energy is used by living cells.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.6s forwards;">
+                    <div class="reaction-title">
+                        Formation of Water
+                        <span class="type-tag tag-combination">Combination</span>
+                    </div>
+                    <div class="reaction-eq">2H₂(g) + O₂(g) → 2H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Hydrogen gas burns in oxygen (or air) with a blue flame to form water. This is a classic combination reaction and is highly exothermic.
+                    </div>
+                </div>
+
+                <!-- Decomposition Reactions -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Thermal Decomposition of Calcium Carbonate
+                        <span class="type-tag tag-decomposition">Decomposition</span>
+                    </div>
+                    <div class="reaction-eq">CaCO₃(s) → CaO(s) + CO₂(g) &nbsp;&nbsp;(on heating)</div>
+                    <div class="reaction-desc">
+                        When limestone (calcium carbonate) is heated strongly, it decomposes to form quick lime (calcium oxide) and carbon dioxide gas. This is an important industrial process for manufacturing cement and quick lime.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Decomposition of Ferrous Sulphate
+                        <span class="type-tag tag-decomposition">Decomposition</span>
+                    </div>
+                    <div class="reaction-eq">2FeSO₄(s) → Fe₂O₃(s) + SO₂(g) + SO₃(g) &nbsp;&nbsp;(on heating)</div>
+                    <div class="reaction-desc">
+                        Green crystals of ferrous sulphate (FeSO₄·7H₂O) lose water on heating and then the anhydrous salt decomposes to form reddish-brown ferric oxide, sulphur dioxide and sulphur trioxide. A characteristic smell of burning sulphur is observed.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Thermal Decomposition of Lead Nitrate
+                        <span class="type-tag tag-decomposition">Decomposition</span>
+                    </div>
+                    <div class="reaction-eq">2Pb(NO₃)₂(s) → 2PbO(s) + 4NO₂(g) + O₂(g) &nbsp;&nbsp;(on heating)</div>
+                    <div class="reaction-desc">
+                        White lead nitrate crystals on heating decompose to form yellow lead oxide, reddish-brown nitrogen dioxide gas and oxygen. The emission of brown fumes of NO₂ is a clear indication of this reaction.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Electrolysis of Water
+                        <span class="type-tag tag-decomposition">Electrolytic Decomposition</span>
+                    </div>
+                    <div class="reaction-eq">2H₂O(l) → 2H₂(g) + O₂(g) &nbsp;&nbsp;(electric current)</div>
+                    <div class="reaction-desc">
+                        When electric current is passed through acidified water, it decomposes into hydrogen and oxygen gases. Hydrogen is collected at the cathode (twice the volume) and oxygen at the anode. This is a classic example of electrolytic decomposition.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Photolytic Decomposition of Silver Chloride
+                        <span class="type-tag tag-decomposition">Photolytic</span>
+                    </div>
+                    <div class="reaction-eq">2AgCl(s) → 2Ag(s) + Cl₂(g) &nbsp;&nbsp;(in sunlight)</div>
+                    <div class="reaction-desc">
+                        White silver chloride turns grey when exposed to sunlight because it decomposes into silver and chlorine. This reaction is used in black-and-white photography. Silver bromide also shows similar behaviour.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.6s forwards;">
+                    <div class="reaction-title">
+                        Photolytic Decomposition of Silver Bromide
+                        <span class="type-tag tag-decomposition">Photolytic</span>
+                    </div>
+                    <div class="reaction-eq">2AgBr(s) → 2Ag(s) + Br₂(g) &nbsp;&nbsp;(in sunlight)</div>
+                    <div class="reaction-desc">
+                        Pale yellow silver bromide also decomposes in sunlight to form silver and bromine. This is the basis of photographic films.
+                    </div>
+                </div>
+
+                <!-- Displacement Reactions -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Iron + Copper Sulphate
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)</div>
+                    <div class="reaction-desc">
+                        When an iron nail is dipped in blue copper sulphate solution, iron being more reactive displaces copper. The blue colour of the solution fades and turns pale green (due to FeSO₄) and a reddish-brown coating of copper is deposited on the iron nail.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Copper Sulphate
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + CuSO₄(aq) → ZnSO₄(aq) + Cu(s)</div>
+                    <div class="reaction-desc">
+                        Zinc is more reactive than copper, so it displaces copper from copper sulphate solution. The blue colour disappears and reddish-brown copper is deposited.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Silver Nitrate
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + 2AgNO₃(aq) → Zn(NO₃)₂(aq) + 2Ag(s)</div>
+                    <div class="reaction-desc">
+                        Zinc displaces silver from silver nitrate solution because zinc is higher in the reactivity series than silver. Greyish-white silver is deposited.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Aluminium + Copper Chloride
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">2Al(s) + 3CuCl₂(aq) → 2AlCl₃(aq) + 3Cu(s)</div>
+                    <div class="reaction-desc">
+                        Aluminium being more reactive displaces copper from copper chloride solution. The blue-green colour of CuCl₂ fades and copper metal is deposited.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Lead + Copper Chloride
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Pb(s) + CuCl₂(aq) → PbCl₂(aq) + Cu(s)</div>
+                    <div class="reaction-desc">
+                        Lead displaces copper from copper chloride solution as it is more reactive than copper.
+                    </div>
+                </div>
+
+                <!-- Double Displacement -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Barium Chloride + Sodium Sulphate
+                        <span class="type-tag tag-double">Double Displacement (Precipitation)</span>
+                    </div>
+                    <div class="reaction-eq">BaCl₂(aq) + Na₂SO₄(aq) → BaSO₄(s) + 2NaCl(aq)</div>
+                    <div class="reaction-desc">
+                        When solutions of barium chloride and sodium sulphate are mixed, a white precipitate of barium sulphate is formed immediately. This is a classic precipitation reaction (double displacement).
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Sodium Sulphate + Barium Chloride
+                        <span class="type-tag tag-double">Double Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Na₂SO₄(aq) + BaCl₂(aq) → BaSO₄(s) + 2NaCl(aq)</div>
+                    <div class="reaction-desc">
+                        Same reaction as above. White insoluble barium sulphate precipitates out while sodium chloride remains in solution.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Lead Nitrate + Potassium Iodide
+                        <span class="type-tag tag-double">Double Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Pb(NO₃)₂(aq) + 2KI(aq) → PbI₂(s) + 2KNO₃(aq)</div>
+                    <div class="reaction-desc">
+                        Mixing lead nitrate and potassium iodide solutions produces a bright yellow precipitate of lead iodide. This is one of the most visually striking precipitation reactions in Class 10.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Sodium Hydroxide + Hydrochloric Acid
+                        <span class="type-tag tag-neutralisation">Neutralisation</span>
+                    </div>
+                    <div class="reaction-eq">NaOH(aq) + HCl(aq) → NaCl(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        This is a neutralisation reaction (a special case of double displacement). Acid and base react to form salt and water. Heat is also liberated.
+                    </div>
+                </div>
+
+                <!-- Redox / Oxidation-Reduction -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Oxidation of Copper
+                        <span class="type-tag tag-redox">Oxidation</span>
+                    </div>
+                    <div class="reaction-eq">2Cu(s) + O₂(g) → 2CuO(s)</div>
+                    <div class="reaction-desc">
+                        When copper is heated in air, it reacts with oxygen to form black copper(II) oxide. Copper is oxidised and oxygen is reduced.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Reduction of Copper Oxide
+                        <span class="type-tag tag-redox">Reduction</span>
+                    </div>
+                    <div class="reaction-eq">CuO(s) + H₂(g) → Cu(s) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Black copper oxide is reduced to reddish-brown copper metal when hydrogen gas is passed over it. Hydrogen acts as a reducing agent and itself gets oxidised to water.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Dilute Sulphuric Acid
+                        <span class="type-tag tag-displacement">Displacement + Redox</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + H₂SO₄(aq) → ZnSO₄(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Zinc reacts with dilute sulphuric acid to liberate hydrogen gas (which burns with a pop sound) and forms zinc sulphate. Zinc is oxidised and H⁺ ions are reduced.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Iron + Steam
+                        <span class="type-tag tag-redox">Redox</span>
+                    </div>
+                    <div class="reaction-eq">3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g)</div>
+                    <div class="reaction-desc">
+                        Red hot iron reacts with steam to form iron(II,III) oxide (Fe₃O₄) and hydrogen gas. This is an important redox reaction.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Corrosion of Iron (Rusting)
+                        <span class="type-tag tag-redox">Oxidation</span>
+                    </div>
+                    <div class="reaction-eq">4Fe(s) + 3O₂(g) + xH₂O(l) → 2Fe₂O₃·xH₂O(s)</div>
+                    <div class="reaction-desc">
+                        Iron reacts with oxygen and moisture present in air to form hydrated iron(III) oxide (rust), which is reddish-brown. Rusting is a slow oxidation process that damages iron structures.
+                    </div>
+                </div>
+
+            </div>
+                        <!-- CHAPTER 2: Acids, Bases and Salts -->
+            <div id="ch2" class="section">
+                <h1 class="section-heading">Chapter 2</h1>
+                <div class="section-sub">Acids, Bases and Salts</div>
+
+                <!-- Reactions of Acids with Metals -->
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Dilute Hydrochloric Acid
+                        <span class="type-tag tag-displacement">Acid + Metal</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + 2HCl(aq) → ZnCl₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Zinc reacts with dilute hydrochloric acid to form zinc chloride and hydrogen gas. The hydrogen gas burns with a characteristic ‘pop’ sound when a burning matchstick is brought near it. This confirms the presence of hydrogen.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Dilute Sulphuric Acid
+                        <span class="type-tag tag-displacement">Acid + Metal</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + H₂SO₄(aq) → ZnSO₄(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Zinc granules react with dilute sulphuric acid to liberate hydrogen gas and form zinc sulphate. This is one of the most common laboratory methods to prepare hydrogen gas.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Magnesium + Dilute Hydrochloric Acid
+                        <span class="type-tag tag-displacement">Acid + Metal</span>
+                    </div>
+                    <div class="reaction-eq">Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Magnesium reacts vigorously with dilute hydrochloric acid to produce magnesium chloride and hydrogen gas. The reaction is faster than that of zinc.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Iron + Dilute Hydrochloric Acid
+                        <span class="type-tag tag-displacement">Acid + Metal</span>
+                    </div>
+                    <div class="reaction-eq">Fe(s) + 2HCl(aq) → FeCl₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Iron reacts with dilute hydrochloric acid to form ferrous chloride and hydrogen gas. The reaction is slower compared to magnesium and zinc.
+                    </div>
+                </div>
+
+                <!-- Acids with Metal Carbonates & Hydrogen Carbonates -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Sodium Carbonate + Hydrochloric Acid
+                        <span class="type-tag tag-double">Acid + Carbonate</span>
+                    </div>
+                    <div class="reaction-eq">Na₂CO₃(s) + 2HCl(aq) → 2NaCl(aq) + H₂O(l) + CO₂(g)</div>
+                    <div class="reaction-desc">
+                        Sodium carbonate (washing soda) reacts with dilute hydrochloric acid to form sodium chloride, water and carbon dioxide gas. The CO₂ gas turns lime water milky.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Sodium Hydrogen Carbonate + Hydrochloric Acid
+                        <span class="type-tag tag-double">Acid + Hydrogen Carbonate</span>
+                    </div>
+                    <div class="reaction-eq">NaHCO₃(s) + HCl(aq) → NaCl(aq) + H₂O(l) + CO₂(g)</div>
+                    <div class="reaction-desc">
+                        Baking soda reacts with hydrochloric acid to liberate carbon dioxide. This reaction is used in soda-acid fire extinguishers.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Calcium Carbonate + Hydrochloric Acid
+                        <span class="type-tag tag-double">Acid + Carbonate</span>
+                    </div>
+                    <div class="reaction-eq">CaCO₃(s) + 2HCl(aq) → CaCl₂(aq) + H₂O(l) + CO₂(g)</div>
+                    <div class="reaction-desc">
+                        Marble chips or limestone react with dilute hydrochloric acid to produce carbon dioxide gas, calcium chloride and water. This is a common laboratory test for carbonates.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Lime Water Test for CO₂
+                        <span class="type-tag tag-combination">Test Reaction</span>
+                    </div>
+                    <div class="reaction-eq">Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Carbon dioxide turns lime water (calcium hydroxide solution) milky due to the formation of insoluble calcium carbonate. This is the standard confirmatory test for CO₂.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Excess CO₂ with Lime Water
+                        <span class="type-tag tag-combination">Further Reaction</span>
+                    </div>
+                    <div class="reaction-eq">CaCO₃(s) + H₂O(l) + CO₂(g) → Ca(HCO₃)₂(aq)</div>
+                    <div class="reaction-desc">
+                        When excess carbon dioxide is passed through the milky lime water, the milkiness disappears because insoluble calcium carbonate is converted into soluble calcium hydrogen carbonate.
+                    </div>
+                </div>
+
+                <!-- Neutralisation Reactions -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Sodium Hydroxide + Hydrochloric Acid
+                        <span class="type-tag tag-neutralisation">Neutralisation</span>
+                    </div>
+                    <div class="reaction-eq">NaOH(aq) + HCl(aq) → NaCl(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Strong base reacts with strong acid to form salt (sodium chloride) and water. Heat is evolved. This is a classic neutralisation reaction.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Potassium Hydroxide + Nitric Acid
+                        <span class="type-tag tag-neutralisation">Neutralisation</span>
+                    </div>
+                    <div class="reaction-eq">KOH(aq) + HNO₃(aq) → KNO₃(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Potassium hydroxide neutralises nitric acid to form potassium nitrate and water.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Sodium Hydroxide + Sulphuric Acid
+                        <span class="type-tag tag-neutralisation">Neutralisation</span>
+                    </div>
+                    <div class="reaction-eq">2NaOH(aq) + H₂SO₄(aq) → Na₂SO₄(aq) + 2H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Two molecules of sodium hydroxide are required to completely neutralise one molecule of sulphuric acid, forming sodium sulphate and water.
+                    </div>
+                </div>
+
+                <!-- Acids with Metal Oxides -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Copper Oxide + Hydrochloric Acid
+                        <span class="type-tag tag-neutralisation">Acid + Metal Oxide</span>
+                    </div>
+                    <div class="reaction-eq">CuO(s) + 2HCl(aq) → CuCl₂(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Black copper oxide reacts with dilute hydrochloric acid to form bluish-green copper chloride solution and water. Metal oxides are basic in nature and neutralise acids.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Copper Oxide + Sulphuric Acid
+                        <span class="type-tag tag-neutralisation">Acid + Metal Oxide</span>
+                    </div>
+                    <div class="reaction-eq">CuO(s) + H₂SO₄(aq) → CuSO₄(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Copper oxide dissolves in dilute sulphuric acid to form blue copper sulphate solution.
+                    </div>
+                </div>
+
+                <!-- Bases with Non-metal Oxides -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Calcium Hydroxide + Carbon Dioxide
+                        <span class="type-tag tag-neutralisation">Base + Non-metal Oxide</span>
+                    </div>
+                    <div class="reaction-eq">Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Non-metal oxides are acidic. Carbon dioxide (acidic oxide) reacts with calcium hydroxide (base) to form salt and water.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Sodium Hydroxide + Carbon Dioxide
+                        <span class="type-tag tag-neutralisation">Base + Non-metal Oxide</span>
+                    </div>
+                    <div class="reaction-eq">2NaOH(aq) + CO₂(g) → Na₂CO₃(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Sodium hydroxide absorbs carbon dioxide to form sodium carbonate and water. This reaction is used to remove CO₂ from air in closed systems.
+                    </div>
+                </div>
+
+                <!-- Reaction of Bases with Metals -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Sodium Hydroxide
+                        <span class="type-tag tag-displacement">Base + Metal</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + 2NaOH(aq) → Na₂ZnO₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Zinc reacts with hot concentrated sodium hydroxide to form sodium zincate and hydrogen gas. Zinc is an amphoteric metal.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Aluminium + Sodium Hydroxide
+                        <span class="type-tag tag-displacement">Base + Metal</span>
+                    </div>
+                    <div class="reaction-eq">2Al(s) + 2NaOH(aq) + 2H₂O(l) → 2NaAlO₂(aq) + 3H₂(g)</div>
+                    <div class="reaction-desc">
+                        Aluminium reacts with sodium hydroxide to form sodium aluminate and hydrogen gas. This shows the amphoteric nature of aluminium.
+                    </div>
+                </div>
+
+                <!-- Important Industrial Reactions / Salts -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Chlor-Alkali Process
+                        <span class="type-tag tag-decomposition">Electrolysis</span>
+                    </div>
+                    <div class="reaction-eq">2NaCl(aq) + 2H₂O(l) → 2NaOH(aq) + Cl₂(g) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        When electricity is passed through an aqueous solution of sodium chloride (brine), it decomposes to form sodium hydroxide, chlorine gas (at anode) and hydrogen gas (at cathode). This is called the chlor-alkali process.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Formation of Bleaching Powder
+                        <span class="type-tag tag-combination">Important Salt</span>
+                    </div>
+                    <div class="reaction-eq">Ca(OH)₂(s) + Cl₂(g) → CaOCl₂(s) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Bleaching powder (calcium oxychloride) is prepared by the action of chlorine on dry slaked lime. It is used for bleaching cotton and paper and for disinfecting drinking water.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Formation of Baking Soda
+                        <span class="type-tag tag-combination">Important Salt</span>
+                    </div>
+                    <div class="reaction-eq">NaCl + H₂O + CO₂ + NH₃ → NH₄Cl + NaHCO₃</div>
+                    <div class="reaction-desc">
+                        Sodium hydrogen carbonate (baking soda) is produced by the Solvay process. It is used in baking, as an antacid, and in soda-acid fire extinguishers.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Heating of Baking Soda
+                        <span class="type-tag tag-decomposition">Decomposition</span>
+                    </div>
+                    <div class="reaction-eq">2NaHCO₃(s) → Na₂CO₃(s) + H₂O(l) + CO₂(g)</div>
+                    <div class="reaction-desc">
+                        On heating, baking soda decomposes to form sodium carbonate, water and carbon dioxide. This reaction helps cakes and bread to rise.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Formation of Washing Soda
+                        <span class="type-tag tag-combination">Important Salt</span>
+                    </div>
+                    <div class="reaction-eq">Na₂CO₃ + 10H₂O → Na₂CO₃·10H₂O</div>
+                    <div class="reaction-desc">
+                        Anhydrous sodium carbonate is recrystallised to form washing soda (sodium carbonate decahydrate). It is used in glass, soap and paper industries and for removing permanent hardness of water.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.6s forwards;">
+                    <div class="reaction-title">
+                        Plaster of Paris from Gypsum
+                        <span class="type-tag tag-decomposition">Important Salt</span>
+                    </div>
+                    <div class="reaction-eq">CaSO₄·2H₂O → CaSO₄·½H₂O + 1½H₂O &nbsp;&nbsp;(373 K)</div>
+                    <div class="reaction-desc">
+                        Gypsum is heated at 373 K to form Plaster of Paris (calcium sulphate hemihydrate). On mixing with water it again forms gypsum and sets into a hard mass. Used for making casts and for setting fractured bones.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.65s forwards;">
+                    <div class="reaction-title">
+                        Setting of Plaster of Paris
+                        <span class="type-tag tag-combination">Setting Reaction</span>
+                    </div>
+                    <div class="reaction-eq">CaSO₄·½H₂O + 1½H₂O → CaSO₄·2H₂O</div>
+                    <div class="reaction-desc">
+                        When Plaster of Paris is mixed with water, it rehydrates and forms gypsum, which sets into a hard solid mass.
+                    </div>
+                </div>
+
+            </div>
+                        <!-- CHAPTER 3: Metals and Non-metals -->
+            <div id="ch3" class="section">
+                <h1 class="section-heading">Chapter 3</h1>
+                <div class="section-sub">Metals and Non-metals</div>
+
+                <!-- Reaction with Oxygen -->
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Sodium + Oxygen
+                        <span class="type-tag tag-combination">Metal + Oxygen</span>
+                    </div>
+                    <div class="reaction-eq">4Na(s) + O₂(g) → 2Na₂O(s)</div>
+                    <div class="reaction-desc">
+                        Sodium burns in oxygen with a yellow flame to form sodium oxide. Sodium is highly reactive and is stored under kerosene to prevent reaction with air and moisture.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Magnesium + Oxygen
+                        <span class="type-tag tag-combination">Metal + Oxygen</span>
+                    </div>
+                    <div class="reaction-eq">2Mg(s) + O₂(g) → 2MgO(s)</div>
+                    <div class="reaction-desc">
+                        Magnesium burns with a dazzling white flame to form white magnesium oxide. Magnesium oxide is basic in nature and turns red litmus blue.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Aluminium + Oxygen
+                        <span class="type-tag tag-combination">Metal + Oxygen</span>
+                    </div>
+                    <div class="reaction-eq">4Al(s) + 3O₂(g) → 2Al₂O₃(s)</div>
+                    <div class="reaction-desc">
+                        Aluminium forms a thin protective layer of aluminium oxide on its surface which prevents further oxidation. This is why aluminium appears unreactive.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Oxygen
+                        <span class="type-tag tag-combination">Metal + Oxygen</span>
+                    </div>
+                    <div class="reaction-eq">2Zn(s) + O₂(g) → 2ZnO(s)</div>
+                    <div class="reaction-desc">
+                        Zinc burns in air to form zinc oxide. Zinc oxide is amphoteric in nature.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Iron + Oxygen
+                        <span class="type-tag tag-combination">Metal + Oxygen</span>
+                    </div>
+                    <div class="reaction-eq">3Fe(s) + 2O₂(g) → Fe₃O₄(s)</div>
+                    <div class="reaction-desc">
+                        Iron filings burn in oxygen to form iron(II,III) oxide (magnetic oxide of iron).
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.6s forwards;">
+                    <div class="reaction-title">
+                        Copper + Oxygen
+                        <span class="type-tag tag-combination">Metal + Oxygen</span>
+                    </div>
+                    <div class="reaction-eq">2Cu(s) + O₂(g) → 2CuO(s)</div>
+                    <div class="reaction-desc">
+                        Copper on heating in air forms black copper(II) oxide. The reddish-brown colour of copper changes to black.
+                    </div>
+                </div>
+
+                <!-- Amphoteric Oxides -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Aluminium Oxide + Hydrochloric Acid
+                        <span class="type-tag tag-neutralisation">Amphoteric Oxide</span>
+                    </div>
+                    <div class="reaction-eq">Al₂O₃(s) + 6HCl(aq) → 2AlCl₃(aq) + 3H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Aluminium oxide reacts with acids to form salt and water, showing basic character.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Aluminium Oxide + Sodium Hydroxide
+                        <span class="type-tag tag-neutralisation">Amphoteric Oxide</span>
+                    </div>
+                    <div class="reaction-eq">Al₂O₃(s) + 2NaOH(aq) → 2NaAlO₂(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Aluminium oxide also reacts with bases to form sodium aluminate and water, showing acidic character. Hence it is amphoteric.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Zinc Oxide + Hydrochloric Acid
+                        <span class="type-tag tag-neutralisation">Amphoteric Oxide</span>
+                    </div>
+                    <div class="reaction-eq">ZnO(s) + 2HCl(aq) → ZnCl₂(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Zinc oxide reacts with acids to form zinc chloride and water.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Zinc Oxide + Sodium Hydroxide
+                        <span class="type-tag tag-neutralisation">Amphoteric Oxide</span>
+                    </div>
+                    <div class="reaction-eq">ZnO(s) + 2NaOH(aq) → Na₂ZnO₂(aq) + H₂O(l)</div>
+                    <div class="reaction-desc">
+                        Zinc oxide reacts with sodium hydroxide to form sodium zincate. This proves the amphoteric nature of ZnO.
+                    </div>
+                </div>
+
+                <!-- Reaction with Water -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Potassium + Water
+                        <span class="type-tag tag-displacement">Metal + Water</span>
+                    </div>
+                    <div class="reaction-eq">2K(s) + 2H₂O(l) → 2KOH(aq) + H₂(g) + Heat</div>
+                    <div class="reaction-desc">
+                        Potassium reacts violently with cold water. The hydrogen gas produced catches fire. Potassium is stored under kerosene.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Sodium + Water
+                        <span class="type-tag tag-displacement">Metal + Water</span>
+                    </div>
+                    <div class="reaction-eq">2Na(s) + 2H₂O(l) → 2NaOH(aq) + H₂(g) + Heat</div>
+                    <div class="reaction-desc">
+                        Sodium reacts vigorously with cold water to form sodium hydroxide and hydrogen gas. The reaction is highly exothermic and hydrogen often catches fire.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Calcium + Water
+                        <span class="type-tag tag-displacement">Metal + Water</span>
+                    </div>
+                    <div class="reaction-eq">Ca(s) + 2H₂O(l) → Ca(OH)₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Calcium reacts with water less vigorously than sodium. The hydrogen gas sticks to the surface of calcium and makes it float.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Magnesium + Hot Water
+                        <span class="type-tag tag-displacement">Metal + Water</span>
+                    </div>
+                    <div class="reaction-eq">Mg(s) + 2H₂O(l) → Mg(OH)₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Magnesium reacts with hot water to form magnesium hydroxide and hydrogen. It does not react with cold water.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Aluminium + Steam
+                        <span class="type-tag tag-displacement">Metal + Steam</span>
+                    </div>
+                    <div class="reaction-eq">2Al(s) + 3H₂O(g) → Al₂O₃(s) + 3H₂(g)</div>
+                    <div class="reaction-desc">
+                        Aluminium reacts with steam to form aluminium oxide and hydrogen gas.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.6s forwards;">
+                    <div class="reaction-title">
+                        Iron + Steam
+                        <span class="type-tag tag-displacement">Metal + Steam</span>
+                    </div>
+                    <div class="reaction-eq">3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g)</div>
+                    <div class="reaction-desc">
+                        Red hot iron reacts with steam to form iron(II,III) oxide and hydrogen gas. This reaction was earlier used for the commercial production of hydrogen.
+                    </div>
+                </div>
+
+                <!-- Reaction with Acids -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Magnesium + Dilute HCl
+                        <span class="type-tag tag-displacement">Metal + Acid</span>
+                    </div>
+                    <div class="reaction-eq">Mg(s) + 2HCl(aq) → MgCl₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Magnesium reacts rapidly with dilute hydrochloric acid to liberate hydrogen gas.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Aluminium + Dilute HCl
+                        <span class="type-tag tag-displacement">Metal + Acid</span>
+                    </div>
+                    <div class="reaction-eq">2Al(s) + 6HCl(aq) → 2AlCl₃(aq) + 3H₂(g)</div>
+                    <div class="reaction-desc">
+                        Aluminium reacts with dilute hydrochloric acid to form aluminium chloride and hydrogen.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Dilute HCl
+                        <span class="type-tag tag-displacement">Metal + Acid</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + 2HCl(aq) → ZnCl₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Zinc reacts with dilute hydrochloric acid to produce hydrogen gas which burns with a pop sound.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Iron + Dilute HCl
+                        <span class="type-tag tag-displacement">Metal + Acid</span>
+                    </div>
+                    <div class="reaction-eq">Fe(s) + 2HCl(aq) → FeCl₂(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Iron reacts with dilute hydrochloric acid to form ferrous chloride and hydrogen gas. The reaction is slower than zinc.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Dilute H₂SO₄
+                        <span class="type-tag tag-displacement">Metal + Acid</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + H₂SO₄(aq) → ZnSO₄(aq) + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Zinc reacts with dilute sulphuric acid to form zinc sulphate and hydrogen. Copper, silver and gold do not react with dilute acids.
+                    </div>
+                </div>
+
+                <!-- Displacement Reactions -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Iron + Copper Sulphate
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)</div>
+                    <div class="reaction-desc">
+                        Iron being more reactive than copper displaces copper from copper sulphate solution. Blue colour of the solution changes to pale green and reddish-brown copper is deposited.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Copper Sulphate
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + CuSO₄(aq) → ZnSO₄(aq) + Cu(s)</div>
+                    <div class="reaction-desc">
+                        Zinc displaces copper from copper sulphate solution. The blue colour disappears.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Zinc + Iron Sulphate
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Zn(s) + FeSO₄(aq) → ZnSO₄(aq) + Fe(s)</div>
+                    <div class="reaction-desc">
+                        Zinc is more reactive than iron and displaces it from iron sulphate solution.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Copper + Silver Nitrate
+                        <span class="type-tag tag-displacement">Displacement</span>
+                    </div>
+                    <div class="reaction-eq">Cu(s) + 2AgNO₃(aq) → Cu(NO₃)₂(aq) + 2Ag(s)</div>
+                    <div class="reaction-desc">
+                        Copper displaces silver from silver nitrate solution because copper is more reactive than silver. Greyish silver is deposited and the solution turns blue.
+                    </div>
+                </div>
+
+                <!-- Thermit Reaction & Extraction -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Thermit Reaction
+                        <span class="type-tag tag-displacement">Displacement (Highly Exothermic)</span>
+                    </div>
+                    <div class="reaction-eq">Fe₂O₃(s) + 2Al(s) → 2Fe(l) + Al₂O₃(s) + Heat</div>
+                    <div class="reaction-desc">
+                        Aluminium reduces iron(III) oxide to molten iron. The reaction is highly exothermic and is used for welding railway tracks (thermit welding).
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Roasting of Zinc Sulphide
+                        <span class="type-tag tag-redox">Roasting</span>
+                    </div>
+                    <div class="reaction-eq">2ZnS(s) + 3O₂(g) → 2ZnO(s) + 2SO₂(g)</div>
+                    <div class="reaction-desc">
+                        Zinc sulphide ore is heated in excess air to convert it into zinc oxide. This process is called roasting.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Calcination of Zinc Carbonate
+                        <span class="type-tag tag-decomposition">Calcination</span>
+                    </div>
+                    <div class="reaction-eq">ZnCO₃(s) → ZnO(s) + CO₂(g)</div>
+                    <div class="reaction-desc">
+                        Zinc carbonate is heated in limited supply of air to obtain zinc oxide. This process is called calcination.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Reduction of Zinc Oxide
+                        <span class="type-tag tag-redox">Reduction</span>
+                    </div>
+                    <div class="reaction-eq">ZnO(s) + C(s) → Zn(s) + CO(g)</div>
+                    <div class="reaction-desc">
+                        Zinc oxide is reduced to zinc metal by heating with carbon (coke). Carbon acts as a reducing agent.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Formation of Ionic Compound (Sodium Chloride)
+                        <span class="type-tag tag-combination">Ionic Bond</span>
+                    </div>
+                    <div class="reaction-eq">2Na(s) + Cl₂(g) → 2NaCl(s)</div>
+                    <div class="reaction-desc">
+                        Sodium (metal) loses one electron to form Na⁺ and chlorine (non-metal) gains one electron to form Cl⁻. The electrostatic force of attraction between them forms the ionic compound sodium chloride.
+                    </div>
+                </div>
+
+            </div>
+                        <!-- CHAPTER 4: Carbon and its Compounds -->
+            <div id="ch4" class="section">
+                <h1 class="section-heading">Chapter 4</h1>
+                <div class="section-sub">Carbon and its Compounds</div>
+
+                <!-- Combustion -->
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Combustion of Methane
+                        <span class="type-tag tag-combination">Combustion</span>
+                    </div>
+                    <div class="reaction-eq">CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(g) + Heat + Light</div>
+                    <div class="reaction-desc">
+                        Methane burns in sufficient oxygen with a clean blue flame to form carbon dioxide and water, releasing a large amount of heat and light. This is the reaction that occurs when natural gas is used as fuel.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Combustion of Ethanol
+                        <span class="type-tag tag-combination">Combustion</span>
+                    </div>
+                    <div class="reaction-eq">C₂H₅OH(l) + 3O₂(g) → 2CO₂(g) + 3H₂O(g) + Heat + Light</div>
+                    <div class="reaction-desc">
+                        Ethanol burns completely in air to form carbon dioxide and water. Saturated hydrocarbons and alcohols generally burn with a clean blue flame when oxygen supply is sufficient.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Combustion of Carbon
+                        <span class="type-tag tag-combination">Combustion</span>
+                    </div>
+                    <div class="reaction-eq">C(s) + O₂(g) → CO₂(g) + Heat + Light</div>
+                    <div class="reaction-desc">
+                        Carbon burns in oxygen (or air) to form carbon dioxide, releasing heat and light.
+                    </div>
+                </div>
+
+                <!-- Oxidation -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Oxidation of Ethanol
+                        <span class="type-tag tag-redox">Oxidation</span>
+                    </div>
+                    <div class="reaction-eq">CH₃CH₂OH → CH₃COOH &nbsp;&nbsp;(Alkaline KMnO₄ / Acidified K₂Cr₂O₇ + Heat)</div>
+                    <div class="reaction-desc">
+                        Ethanol is oxidised to ethanoic acid when heated with alkaline potassium permanganate or acidified potassium dichromate. The purple colour of KMnO₄ disappears. This is an important oxidation reaction.
+                    </div>
+                </div>
+
+                <!-- Addition Reactions -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Hydrogenation of Ethene
+                        <span class="type-tag tag-combination">Addition</span>
+                    </div>
+                    <div class="reaction-eq">CH₂=CH₂ + H₂ → CH₃–CH₃ &nbsp;&nbsp;(Ni or Pd catalyst)</div>
+                    <div class="reaction-desc">
+                        Unsaturated hydrocarbons add hydrogen in the presence of a catalyst (nickel or palladium) to form saturated hydrocarbons. This reaction is called hydrogenation and is used to convert vegetable oils into vanaspati ghee.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Addition of Hydrogen to Ethyne
+                        <span class="type-tag tag-combination">Addition</span>
+                    </div>
+                    <div class="reaction-eq">CH≡CH + 2H₂ → CH₃–CH₃ &nbsp;&nbsp;(Ni catalyst)</div>
+                    <div class="reaction-desc">
+                        Ethyne (acetylene) adds two molecules of hydrogen in the presence of nickel catalyst to form ethane.
+                    </div>
+                </div>
+
+                <!-- Substitution Reactions -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Chlorination of Methane
+                        <span class="type-tag tag-displacement">Substitution</span>
+                    </div>
+                    <div class="reaction-eq">CH₄ + Cl₂ → CH₃Cl + HCl &nbsp;&nbsp;(in sunlight)</div>
+                    <div class="reaction-desc">
+                        In the presence of sunlight, chlorine replaces one hydrogen atom of methane to form chloromethane and hydrogen chloride. This is a substitution reaction. Further substitution can occur to form CH₂Cl₂, CHCl₃ and CCl₄.
+                    </div>
+                </div>
+
+                <!-- Reactions of Ethanol -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Ethanol + Sodium
+                        <span class="type-tag tag-displacement">Reaction with Metal</span>
+                    </div>
+                    <div class="reaction-eq">2C₂H₅OH + 2Na → 2C₂H₅ONa + H₂(g)</div>
+                    <div class="reaction-desc">
+                        Ethanol reacts with sodium to form sodium ethoxide and hydrogen gas. This reaction is used to detect the presence of alcoholic –OH group.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Dehydration of Ethanol
+                        <span class="type-tag tag-decomposition">Dehydration</span>
+                    </div>
+                    <div class="reaction-eq">CH₃CH₂OH → CH₂=CH₂ + H₂O &nbsp;&nbsp;(Conc. H₂SO₄, 443 K)</div>
+                    <div class="reaction-desc">
+                        When ethanol is heated with excess concentrated sulphuric acid at 443 K, it undergoes dehydration to form ethene. Concentrated H₂SO₄ acts as a dehydrating agent.
+                    </div>
+                </div>
+
+                <!-- Reactions of Ethanoic Acid -->
+                <div class="divider"></div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.2s forwards;">
+                    <div class="reaction-title">
+                        Ethanoic Acid + Sodium Hydroxide
+                        <span class="type-tag tag-neutralisation">Neutralisation</span>
+                    </div>
+                    <div class="reaction-eq">CH₃COOH + NaOH → CH₃COONa + H₂O</div>
+                    <div class="reaction-desc">
+                        Ethanoic acid reacts with sodium hydroxide to form sodium ethanoate (sodium acetate) and water. This is a neutralisation reaction.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.3s forwards;">
+                    <div class="reaction-title">
+                        Ethanoic Acid + Sodium Carbonate
+                        <span class="type-tag tag-double">Acid + Carbonate</span>
+                    </div>
+                    <div class="reaction-eq">2CH₃COOH + Na₂CO₃ → 2CH₃COONa + H₂O + CO₂</div>
+                    <div class="reaction-desc">
+                        Ethanoic acid reacts with sodium carbonate to liberate carbon dioxide gas, which turns lime water milky. This confirms the acidic nature of ethanoic acid.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.4s forwards;">
+                    <div class="reaction-title">
+                        Ethanoic Acid + Sodium Hydrogen Carbonate
+                        <span class="type-tag tag-double">Acid + Hydrogen Carbonate</span>
+                    </div>
+                    <div class="reaction-eq">CH₃COOH + NaHCO₃ → CH₃COONa + H₂O + CO₂</div>
+                    <div class="reaction-desc">
+                        Ethanoic acid reacts with baking soda to produce carbon dioxide, sodium ethanoate and water. This reaction is used in baking and in soda-acid fire extinguishers.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.5s forwards;">
+                    <div class="reaction-title">
+                        Esterification Reaction
+                        <span class="type-tag tag-combination">Esterification</span>
+                    </div>
+                    <div class="reaction-eq">CH₃COOH + C₂H₅OH ⇌ CH₃COOC₂H₅ + H₂O &nbsp;&nbsp;(Conc. H₂SO₄)</div>
+                    <div class="reaction-desc">
+                        Ethanoic acid reacts with ethanol in the presence of a few drops of concentrated sulphuric acid to form a sweet-smelling ester (ethyl ethanoate) and water. This reaction is reversible and is called esterification.
+                    </div>
+                </div>
+
+                <div class="reaction-card" style="animation: contentIn 0.9s ease 0.55s forwards;">
+                    <div class="reaction-title">
+                        Saponification Reaction
+                        <span class="type-tag tag-double">Saponification</span>
+                    </div>
+                    <div class="reaction-eq">CH₃COOC₂H₅ + NaOH → CH₃COONa + C₂H₅OH</div>
+                    <div class="reaction-desc">
+                        When an ester is heated with sodium hydroxide, it gives back the alcohol and the sodium salt of the carboxylic acid. This reaction is called saponification and is used in the preparation of soap.
+                    </div>
+                </div>
+
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">2. Formation of Slaked Lime</span>
-                    <span class="badge">Exothermic Combination</span>
+            <!-- COLOURS OF COMPOUNDS TAB -->
+            <div id="colours" class="section">
+                <h1 class="section-heading">Colours of Compounds</h1>
+                <div class="section-sub">Important Compounds & Elements – Class 10 NCERT</div>
+
+                <div class="definition-box" style="animation: contentIn 1s ease 0.3s forwards;">
+                    <p>Below is a complete list of important compounds, salts, oxides and elements whose colours are frequently asked in Class 10 CBSE Board exams. Memorising these colours helps in identifying products of reactions quickly.</p>
                 </div>
-                <div class="equation-box">CaO(s) + H₂O(l) → Ca(OH)₂(aq) + Heat</div>
-                <div class="notes">Quicklime reacts vigorously with water producing slaked lime and heat.</div>
+
+                <div style="overflow-x:auto; margin-top:30px; animation: contentIn 1s ease 0.5s forwards;">
+                    <table class="colour-table">
+                        <thead>
+                            <tr>
+                                <th>Compound / Element</th>
+                                <th>Formula</th>
+                                <th>Colour</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#1e90ff;"></span>Copper Sulphate (hydrated)</td>
+                                <td>CuSO₄·5H₂O</td>
+                                <td>Blue</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#87ceeb;"></span>Copper Sulphate (anhydrous)</td>
+                                <td>CuSO₄</td>
+                                <td>White</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#228b22;"></span>Ferrous Sulphate (hydrated)</td>
+                                <td>FeSO₄·7H₂O</td>
+                                <td>Green</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#8b4513;"></span>Ferric Oxide</td>
+                                <td>Fe₂O₃</td>
+                                <td>Reddish-brown</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#cd853f;"></span>Rust</td>
+                                <td>Fe₂O₃·xH₂O</td>
+                                <td>Reddish-brown</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#000000;"></span>Copper Oxide</td>
+                                <td>CuO</td>
+                                <td>Black</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#b87333;"></span>Copper metal</td>
+                                <td>Cu</td>
+                                <td>Reddish-brown</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#20b2aa;"></span>Copper Chloride</td>
+                                <td>CuCl₂</td>
+                                <td>Bluish-green</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffffff; border:1px solid #555;"></span>Barium Sulphate</td>
+                                <td>BaSO₄</td>
+                                <td>White (precipitate)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffd700;"></span>Lead Iodide</td>
+                                <td>PbI₂</td>
+                                <td>Yellow (precipitate)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffeb3b;"></span>Lead Oxide</td>
+                                <td>PbO</td>
+                                <td>Yellow</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffffff; border:1px solid #555;"></span>Lead Nitrate</td>
+                                <td>Pb(NO₃)₂</td>
+                                <td>White</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#8b0000;"></span>Nitrogen Dioxide</td>
+                                <td>NO₂</td>
+                                <td>Brown gas</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffffff; border:1px solid #555;"></span>Silver Chloride</td>
+                                <td>AgCl</td>
+                                <td>White (turns grey in sunlight)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#f0e68c;"></span>Silver Bromide</td>
+                                <td>AgBr</td>
+                                <td>Pale yellow</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffffff; border:1px solid #555;"></span>Magnesium Oxide</td>
+                                <td>MgO</td>
+                                <td>White</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffffff; border:1px solid #555;"></span>Calcium Oxide (Quick lime)</td>
+                                <td>CaO</td>
+                                <td>White</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffffff; border:1px solid #555;"></span>Calcium Carbonate</td>
+                                <td>CaCO₃</td>
+                                <td>White</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffffff; border:1px solid #555;"></span>Zinc Oxide</td>
+                                <td>ZnO</td>
+                                <td>White</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#c0c0c0;"></span>Zinc metal</td>
+                                <td>Zn</td>
+                                <td>Bluish-white / Grey</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#808080;"></span>Iron metal</td>
+                                <td>Fe</td>
+                                <td>Grey</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#c0c0c0;"></span>Aluminium metal</td>
+                                <td>Al</td>
+                                <td>Silvery-white</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#228b22;"></span>Copper Carbonate</td>
+                                <td>CuCO₃</td>
+                                <td>Green</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#000000;"></span>Copper Sulphide</td>
+                                <td>CuS</td>
+                                <td>Black</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ff4500;"></span>Phenolphthalein (in base)</td>
+                                <td>—</td>
+                                <td>Pink</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ff0000;"></span>Methyl Orange (in acid)</td>
+                                <td>—</td>
+                                <td>Red / Pink</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ffff00;"></span>Methyl Orange (in base)</td>
+                                <td>—</td>
+                                <td>Yellow</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#ff0000;"></span>Blue Litmus (in acid)</td>
+                                <td>—</td>
+                                <td>Red</td>
+                            </tr>
+                            <tr>
+                                <td><span class="colour-swatch" style="background:#0000ff;"></span>Red Litmus (in base)</td>
+                                <td>—</td>
+                                <td>Blue</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">3. Whitewashing Reaction (Action of CO₂)</span>
-                    <span class="badge">Combination</span>
-                </div>
-                <div class="equation-box">Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l)</div>
-                <div class="notes">Forms a shiny white layer of Calcium Carbonate after 2-3 days.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">4. Respiration Process</span>
-                    <span class="badge">Exothermic</span>
-                </div>
-                <div class="equation-box">C₆H₁₂O₆(aq) + 6O₂(aq) → 6CO₂(aq) + 6H₂O(l) + Energy</div>
-                <div class="notes">Glucose breaks down in cells to yield energy.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">5. Thermal Decomposition of Ferrous Sulphate</span>
-                    <span class="badge">Thermal Decomposition</span>
-                </div>
-                <div class="equation-box">2FeSO₄(s) --Δ--> Fe₂O₃(s) + SO₂(g) + SO₃(g)</div>
-                <div class="notes">Green FeSO₄·7H₂O crystals lose water, then decompose to reddish-brown Fe₂O₃ and suffocating sulphur gases.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">6. Thermal Decomposition of Calcium Carbonate</span>
-                    <span class="badge">Thermal Decomposition</span>
-                </div>
-                <div class="equation-box">CaCO₃(s) --Δ--> CaO(s) + CO₂(g)</div>
-                <div class="notes">Used in manufacturing of cement.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">7. Thermal Decomposition of Lead Nitrate</span>
-                    <span class="badge">Thermal Decomposition</span>
-                </div>
-                <div class="equation-box">2Pb(NO₃)₂(s) --Δ--> 2PbO(s) + 4NO₂(g) + O₂(g)</div>
-                <div class="notes">Produces brown fumes of Nitrogen Dioxide (NO₂) and yellow Lead Oxide (PbO).</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">8. Electrolytic Decomposition of Water</span>
-                    <span class="badge">Electrolysis</span>
-                </div>
-                <div class="equation-box">2H₂O(l) --Electricity--> 2H₂(g) + O₂(g)</div>
-                <div class="notes">Volume of H₂ gas at cathode is double the volume of O₂ gas at anode.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">9. Photolytic Decomposition of Silver Chloride</span>
-                    <span class="badge">Photolysis</span>
-                </div>
-                <div class="equation-box">2AgCl(s) --Sunlight--> 2Ag(s) + Cl₂(g)</div>
-                <div class="notes">White AgCl turns grey in sunlight. Used in black and white photography.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">10. Photolytic Decomposition of Silver Bromide</span>
-                    <span class="badge">Photolysis</span>
-                </div>
-                <div class="equation-box">2AgBr(s) --Sunlight--> 2Ag(s) + Br₂(g)</div>
-                <div class="notes">Pale yellow AgBr turns grey. Used in black and white photography.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">11. Iron Nails in Copper Sulphate</span>
-                    <span class="badge">Displacement</span>
-                </div>
-                <div class="equation-box">Fe(s) + CuSO₄(aq) → FeSO₄(aq) + Cu(s)</div>
-                <div class="notes">Blue CuSO₄ turns light green; iron nail gets coated with reddish-brown copper deposit.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">12. Zinc in Copper Sulphate</span>
-                    <span class="badge">Displacement</span>
-                </div>
-                <div class="equation-box">Zn(s) + CuSO₄(aq) → ZnSO₄(aq) + Cu(s)</div>
-                <div class="notes">Blue solution becomes colourless.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">13. Lead in Copper Chloride</span>
-                    <span class="badge">Displacement</span>
-                </div>
-                <div class="equation-box">Pb(s) + CuCl₂(aq) → PbCl₂(aq) + Cu(s)</div>
-                <div class="notes">Lead is more reactive than copper and displaces it.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">14. Formation of Barium Sulphate Precipitate</span>
-                    <span class="badge">Double Displacement / Precipitation</span>
-                </div>
-                <div class="equation-box">Na₂SO₄(aq) + BaCl₂(aq) → BaSO₄(s) + 2NaCl(aq)</div>
-                <div class="notes">Insoluble white precipitate of BaSO₄ is formed.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">15. Lead Nitrate with Potassium Iodide</span>
-                    <span class="badge">Double Displacement / Precipitation</span>
-                </div>
-                <div class="equation-box">Pb(NO₃)₂(aq) + 2KI(aq) → PbI₂(s) + 2KNO₃(aq)</div>
-                <div class="notes">Forms a bright yellow precipitate of Lead Iodide.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">16. Oxidation of Copper to Copper Oxide</span>
-                    <span class="badge">Oxidation</span>
-                </div>
-                <div class="equation-box">2Cu(s) + O₂(g) --Δ--> 2CuO(s)</div>
-                <div class="notes">Brown copper powder turns black due to the oxide layer.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">17. Reduction of Copper Oxide</span>
-                    <span class="badge">Redox</span>
-                </div>
-                <div class="equation-box">CuO(s) + H₂(g) --Δ--> Cu(s) + H₂O(g)</div>
-                <div class="notes">Black CuO surface turns brown as copper is recovered.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">18. Reduction of Zinc Oxide</span>
-                    <span class="badge">Redox</span>
-                </div>
-                <div class="equation-box">ZnO(s) + C(s) → Zn(s) + CO(g)</div>
-                <div class="notes">Carbon is oxidized to CO; ZnO is reduced to Zn.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">19. Reaction of Manganese Dioxide with HCl</span>
-                    <span class="badge">Redox</span>
-                </div>
-                <div class="equation-box">MnO₂(s) + 4HCl(aq) → MnCl₂(aq) + 2H₂O(l) + Cl₂(g)</div>
-                <div class="notes">HCl is oxidized to Cl₂; MnO₂ is reduced to MnCl₂.</div>
-            </div>
         </div>
-
-        <!-- Chapter 2 -->
-        <div id="ch2" class="tab-content">
-            <h2 class="section-title">Chapter 2: Acids, Bases and Salts</h2>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">1. Acid + Metal Reaction</span>
-                    <span class="badge">Single Displacement</span>
-                </div>
-                <div class="equation-box">Zn(s) + H₂SO₄(aq) → ZnSO₄(aq) + H₂(g)</div>
-                <div class="notes">Hydrogen gas burns with a pop sound.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">2. Base + Metal Reaction</span>
-                    <span class="badge">Special Base Reaction</span>
-                </div>
-                <div class="equation-box">2NaOH(aq) + Zn(s) → Na₂ZnO₂(aq) + H₂(g)</div>
-                <div class="notes">Forms Sodium Zincate and Hydrogen gas.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">3. Metal Carbonate + Acid</span>
-                    <span class="badge">Gas Evolution</span>
-                </div>
-                <div class="equation-box">Na₂CO₃(s) + 2HCl(aq) → 2NaCl(aq) + H₂O(l) + CO₂(g)</div>
-                <div class="notes">Produces brisk effervescence due to CO₂ gas.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">4. Metal Hydrogen Carbonate + Acid</span>
-                    <span class="badge">Gas Evolution</span>
-                </div>
-                <div class="equation-box">NaHCO₃(s) + HCl(aq) → NaCl(aq) + H₂O(l) + CO₂(g)</div>
-                <div class="notes">Evolves CO₂ gas.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">5. Lime Water Test for CO₂</span>
-                    <span class="badge">Precipitation</span>
-                </div>
-                <div class="equation-box">Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l)</div>
-                <div class="notes">Turns lime water milky due to insoluble Calcium Carbonate.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">6. Excess CO₂ in Lime Water</span>
-                    <span class="badge">Solubility Reaction</span>
-                </div>
-                <div class="equation-box">CaCO₃(s) + H₂O(l) + CO₂(g) → Ca(HCO₃)₂(aq)</div>
-                <div class="notes">Milkiness disappears because Calcium Hydrogen Carbonate is soluble.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">7. Neutralization Reaction</span>
-                    <span class="badge">Neutralization</span>
-                </div>
-                <div class="equation-box">NaOH(aq) + HCl(aq) → NaCl(aq) + H₂O(l)</div>
-                <div class="notes">Acid + Base → Salt + Water.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">8. Metal Oxide + Acid</span>
-                    <span class="badge">Neutralization</span>
-                </div>
-                <div class="equation-box">CuO(s) + 2HCl(aq) → CuCl₂(aq) + H₂O(l)</div>
-                <div class="notes">Black CuO dissolves; solution turns blue-green due to CuCl₂.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">9. Non-Metal Oxide + Base</span>
-                    <span class="badge">Neutralization</span>
-                </div>
-                <div class="equation-box">Ca(OH)₂(aq) + CO₂(g) → CaCO₃(s) + H₂O(l)</div>
-                <div class="notes">Proves non-metallic oxides are acidic in nature.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">10. Dissolution of Acid in Water</span>
-                    <span class="badge">Ionization</span>
-                </div>
-                <div class="equation-box">HCl + H₂O → H₃O⁺ + Cl⁻</div>
-                <div class="notes">Acids show acidic properties only in the presence of water.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">11. Chlor-Alkali Process</span>
-                    <span class="badge">Electrolysis</span>
-                </div>
-                <div class="equation-box">2NaCl(aq) + 2H₂O(l) --Electricity--> 2NaOH(aq) + Cl₂(g) + H₂(g)</div>
-                <div class="notes">Cl₂ at anode, H₂ at cathode, NaOH near cathode.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">12. Formation of Bleaching Powder</span>
-                    <span class="badge">Salt Preparation</span>
-                </div>
-                <div class="equation-box">Ca(OH)₂ + Cl₂ → CaOCl₂ + H₂O</div>
-                <div class="notes">Chlorine gas passed over dry slaked lime produces Bleaching Powder.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">13. Thermal Decomposition of Baking Soda</span>
-                    <span class="badge">Thermal Decomposition</span>
-                </div>
-                <div class="equation-box">2NaHCO₃ --Δ--> Na₂CO₃ + H₂O + CO₂</div>
-                <div class="notes">Occurs while cooking; CO₂ released makes cakes soft and spongy.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">14. Preparation of Washing Soda</span>
-                    <span class="badge">Crystallization</span>
-                </div>
-                <div class="equation-box">Na₂CO₃ + 10H₂O → Na₂CO₃·10H₂O</div>
-                <div class="notes">Recrystallization of anhydrous sodium carbonate.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">15. Preparation of Plaster of Paris</span>
-                    <span class="badge">Dehydration</span>
-                </div>
-                <div class="equation-box">CaSO₄·2H₂O --373K--> CaSO₄·½H₂O + 1½H₂O</div>
-                <div class="notes">Gypsum heated precisely at 373 K (100°C) forms POP.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">16. Setting of Plaster of Paris</span>
-                    <span class="badge">Hydration</span>
-                </div>
-                <div class="equation-box">CaSO₄·½H₂O + 1½H₂O → CaSO₄·2H₂O</div>
-                <div class="notes">POP mixes with water to re-form hard solid Gypsum.</div>
-            </div>
-        </div>
-
-        <!-- Chapter 3 -->
-        <div id="ch3" class="tab-content">
-            <h2 class="section-title">Chapter 3: Metals and Non-Metals</h2>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">1. Combustion of Copper</span>
-                    <span class="badge">Oxidation</span>
-                </div>
-                <div class="equation-box">2Cu + O₂ → 2CuO</div>
-                <div class="notes">Forms black Copper(II) oxide.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">2. Amphoteric Behavior of Aluminium Oxide (with Acid)</span>
-                    <span class="badge">Amphoteric Neutralization</span>
-                </div>
-                <div class="equation-box">Al₂O₃ + 6HCl → 2AlCl₃ + 3H₂O</div>
-                <div class="notes">Alumina acts as a base when reacting with acid.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">3. Amphoteric Behavior of Aluminium Oxide (with Base)</span>
-                    <span class="badge">Amphoteric Neutralization</span>
-                </div>
-                <div class="equation-box">Al₂O₃ + 2NaOH → 2NaAlO₂ + H₂O</div>
-                <div class="notes">Alumina acts as an acid to form Sodium Aluminate.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">4. Water Soluble Metal Oxides</span>
-                    <span class="badge">Base Formation</span>
-                </div>
-                <div class="equation-box">Na₂O(s) + H₂O(l) → 2NaOH(aq)</div>
-                <div class="equation-box">K₂O(s) + H₂O(l) → 2KOH(aq)</div>
-                <div class="notes">Sodium and Potassium oxides dissolve in water to form alkalis.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">5. Metal Reactions with Water / Steam</span>
-                    <span class="badge">Displacement</span>
-                </div>
-                <div class="equation-box">2Na(s) + 2H₂O(l) → 2NaOH(aq) + H₂(g) + Heat</div>
-                <div class="equation-box">Ca(s) + 2H₂O(l) → Ca(OH)₂(aq) + H₂(g)</div>
-                <div class="equation-box">2Al(s) + 3H₂O(g) → Al₂O₃(s) + 3H₂(g)</div>
-                <div class="equation-box">3Fe(s) + 4H₂O(g) → Fe₃O₄(s) + 4H₂(g)</div>
-                <div class="notes">Na reacts violently with cold water; Ca floats; Al and Fe react only with steam.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">6. Roasting of Sulphide Ores</span>
-                    <span class="badge">Roasting (Excess O₂)</span>
-                </div>
-                <div class="equation-box">2ZnS(s) + 3O₂(g) --Δ--> 2ZnO(s) + 2SO₂(g)</div>
-                <div class="notes">Heating sulphide ore in presence of excess air converts it to oxide.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">7. Calcination of Carbonate Ores</span>
-                    <span class="badge">Calcination (Limited O₂)</span>
-                </div>
-                <div class="equation-box">ZnCO₃(s) --Δ--> ZnO(s) + CO₂(g)</div>
-                <div class="notes">Heating carbonate ore in limited air converts it to oxide.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">8. Extraction of Low Reactivity Metals (Cinnabar)</span>
-                    <span class="badge">Thermal Reduction</span>
-                </div>
-                <div class="equation-box">2HgS(s) + 3O₂(g) --Δ--> 2HgO(s) + 2SO₂(g)</div>
-                <div class="equation-box">2HgO(s) --Δ--> 2Hg(l) + O₂(g)</div>
-                <div class="notes">Mercuric sulphide (Cinnabar) reduced to mercury by heating alone.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">9. Thermite Reaction</span>
-                    <span class="badge">Exothermic Displacement</span>
-                </div>
-                <div class="equation-box">Fe₂O₃(s) + 2Al(s) → 2Fe(l) + Al₂O₃(s) + Heat</div>
-                <div class="notes">Highly exothermic; molten iron generated is used to join railway tracks.</div>
-            </div>
-        </div>
-
-        <!-- Chapter 4 -->
-        <div id="ch4" class="tab-content">
-            <h2 class="section-title">Chapter 4: Carbon and Its Compounds</h2>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">1. Combustion of Carbon Compounds</span>
-                    <span class="badge">Combustion</span>
-                </div>
-                <div class="equation-box">CH₄ + 2O₂ → CO₂ + 2H₂O + Heat & Light</div>
-                <div class="equation-box">C₂H₅OH + 3O₂ → 2CO₂ + 3H₂O + Heat & Light</div>
-                <div class="notes">Carbon compounds burn in oxygen releasing CO₂, water, heat, and light.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">2. Oxidation of Ethanol to Ethanoic Acid</span>
-                    <span class="badge">Oxidation</span>
-                </div>
-                <div class="equation-box">CH₃CH₂OH --Alkaline KMnO₄ + Heat / Acidified K₂Cr₂O₇ + Heat--> CH₃COOH</div>
-                <div class="notes">Alkaline KMnO₄ or Acidified K₂Cr₂O₇ act as oxidizing agents.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">3. Addition Reaction (Hydrogenation of Oils)</span>
-                    <span class="badge">Addition</span>
-                </div>
-                <div class="equation-box">R₂C=CR₂ + H₂ --Ni/Pd Catalyst--> R₂HC-CHR₂</div>
-                <div class="notes">Converts unsaturated vegetable oils to saturated fats using Nickel catalyst.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">4. Substitution Reaction of Methane</span>
-                    <span class="badge">Substitution</span>
-                </div>
-                <div class="equation-box">CH₄ + Cl₂ --Sunlight--> CH₃Cl + HCl</div>
-                <div class="notes">Chlorine replaces hydrogen atoms one by one in the presence of sunlight.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">5. Reaction of Ethanol with Sodium</span>
-                    <span class="badge">Metal Displacement</span>
-                </div>
-                <div class="equation-box">2Na + 2CH₃CH₂OH → 2CH₃CH₂O⁻Na⁺ + H₂</div>
-                <div class="notes">Produces Sodium Ethoxide and liberates Hydrogen gas with a pop.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">6. Dehydration of Ethanol to Ethene</span>
-                    <span class="badge">Dehydration</span>
-                </div>
-                <div class="equation-box">CH₃CH₂OH --Hot Conc. H₂SO₄ (443 K)--> CH₂=CH₂ + H₂O</div>
-                <div class="notes">Concentrated Sulphuric Acid acts as a dehydrating agent.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">7. Esterification Reaction</span>
-                    <span class="badge">Esterification</span>
-                </div>
-                <div class="equation-box">CH₃COOH + CH₃CH₂OH --Acid Catalyst--> CH₃COOCH₂CH₃ + H₂O</div>
-                <div class="notes">Ethanoic acid + Ethanol yields sweet-smelling Ethyl Ethanoate (Ester).</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">8. Saponification (Soap Formation)</span>
-                    <span class="badge">Hydrolysis</span>
-                </div>
-                <div class="equation-box">CH₃COOC₂H₅ + NaOH → CH₃COONa + C₂H₅OH</div>
-                <div class="notes">Ester reacts with base to give alcohol and sodium salt of carboxylic acid (soap).</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">9. Reaction of Ethanoic Acid with Bases</span>
-                    <span class="badge">Neutralization</span>
-                </div>
-                <div class="equation-box">CH₃COOH + NaOH → CH₃COONa + H₂O</div>
-                <div class="notes">Forms Sodium Acetate (Sodium Ethanoate) and Water.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <span class="reaction-name">10. Reaction of Ethanoic Acid with Carbonates & Hydrogen Carbonates</span>
-                    <span class="badge">Gas Evolution</span>
-                </div>
-                <div class="equation-box">2CH₃COOH + Na₂CO₃ → 2CH₃COONa + H₂O + CO₂</div>
-                <div class="equation-box">CH₃COOH + NaHCO₃ → CH₃COONa + H₂O + CO₂</div>
-                <div class="notes">Gives brisk effervescence due to CO₂ gas.</div>
-            </div>
-        </div>
-
-        <!-- Tab 5: Colors -->
-        <div id="colors" class="tab-content">
-            <h2 class="section-title">NCERT Colors & Compounds Reference</h2>
-
-            <table class="color-table">
-                <thead>
-                    <tr>
-                        <th>Compound Name</th>
-                        <th>Formula</th>
-                        <th>Observed Color / State</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Magnesium Ribbon</td>
-                        <td><span class="formula">Mg</span></td>
-                        <td><span class="color-swatch" style="background: #cbd5e1;"></span>Silvery White</td>
-                    </tr>
-                    <tr>
-                        <td>Magnesium Oxide</td>
-                        <td><span class="formula">MgO</span></td>
-                        <td><span class="color-swatch" style="background: #ffffff;"></span>White Powder</td>
-                    </tr>
-                    <tr>
-                        <td>Copper Metal</td>
-                        <td><span class="formula">Cu</span></td>
-                        <td><span class="color-swatch" style="background: #b45309;"></span>Reddish Brown</td>
-                    </tr>
-                    <tr>
-                        <td>Copper Oxide</td>
-                        <td><span class="formula">CuO</span></td>
-                        <td><span class="color-swatch" style="background: #000000; border-color: #555;"></span>Black Powder</td>
-                    </tr>
-                    <tr>
-                        <td>Copper Sulphate Solution</td>
-                        <td><span class="formula">CuSO₄(aq)</span></td>
-                        <td><span class="color-swatch" style="background: #0284c7;"></span>Blue</td>
-                    </tr>
-                    <tr>
-                        <td>Hydrated Copper Sulphate</td>
-                        <td><span class="formula">CuSO₄·5H₂O</span></td>
-                        <td><span class="color-swatch" style="background: #2563eb;"></span>Blue Crystals</td>
-                    </tr>
-                    <tr>
-                        <td>Anhydrous Copper Sulphate</td>
-                        <td><span class="formula">CuSO₄</span></td>
-                        <td><span class="color-swatch" style="background: #ffffff;"></span>White Powder</td>
-                    </tr>
-                    <tr>
-                        <td>Ferrous Sulphate Crystals</td>
-                        <td><span class="formula">FeSO₄·7H₂O</span></td>
-                        <td><span class="color-swatch" style="background: #4ade80;"></span>Green Crystals</td>
-                    </tr>
-                    <tr>
-                        <td>Ferrous Sulphate Solution</td>
-                        <td><span class="formula">FeSO₄(aq)</span></td>
-                        <td><span class="color-swatch" style="background: #86efac;"></span>Pale Green</td>
-                    </tr>
-                    <tr>
-                        <td>Ferric Oxide</td>
-                        <td><span class="formula">Fe₂O₃</span></td>
-                        <td><span class="color-swatch" style="background: #7f1d1d;"></span>Reddish Brown</td>
-                    </tr>
-                    <tr>
-                        <td>Lead Nitrate</td>
-                        <td><span class="formula">Pb(NO₃)₂</span></td>
-                        <td><span class="color-swatch" style="background: #ffffff;"></span>White Powder</td>
-                    </tr>
-                    <tr>
-                        <td>Lead Oxide</td>
-                        <td><span class="formula">PbO</span></td>
-                        <td><span class="color-swatch" style="background: #eab308;"></span>Yellow</td>
-                    </tr>
-                    <tr>
-                        <td>Nitrogen Dioxide Gas</td>
-                        <td><span class="formula">NO₂</span></td>
-                        <td><span class="color-swatch" style="background: #92400e;"></span>Brown Fumes</td>
-                    </tr>
-                    <tr>
-                        <td>Lead Iodide Precipitate</td>
-                        <td><span class="formula">PbI₂</span></td>
-                        <td><span class="color-swatch" style="background: #facc15;"></span>Yellow Precipitate</td>
-                    </tr>
-                    <tr>
-                        <td>Barium Sulphate Precipitate</td>
-                        <td><span class="formula">BaSO₄</span></td>
-                        <td><span class="color-swatch" style="background: #ffffff;"></span>White Precipitate</td>
-                    </tr>
-                    <tr>
-                        <td>Silver Chloride</td>
-                        <td><span class="formula">AgCl</span></td>
-                        <td><span class="color-swatch" style="background: #f8fafc;"></span>White (Turns Grey in Sunlight)</td>
-                    </tr>
-                    <tr>
-                        <td>Silver Bromide</td>
-                        <td><span class="formula">AgBr</span></td>
-                        <td><span class="color-swatch" style="background: #fef08a;"></span>Pale Yellow (Turns Grey in Sunlight)</td>
-                    </tr>
-                    <tr>
-                        <td>Potassium Permanganate</td>
-                        <td><span class="formula">KMnO₄</span></td>
-                        <td><span class="color-swatch" style="background: #a855f7;"></span>Purple / Pink Solution</td>
-                    </tr>
-                    <tr>
-                        <td>Potassium Dichromate</td>
-                        <td><span class="formula">K₂Cr₂O₇</span></td>
-                        <td><span class="color-swatch" style="background: #f97316;"></span>Orange Solution</td>
-                    </tr>
-                    <tr>
-                        <td>Copper Chloride Solution</td>
-                        <td><span class="formula">CuCl₂</span></td>
-                        <td><span class="color-swatch" style="background: #14b8a6;"></span>Blue-Green</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </main>
+    </div>
 
     <script>
-        function switchTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('expanded');
+        }
+
+        function showSection(id) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.classList.remove('active');
             });
 
-            // Deactivate all tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            // Show selected section
+            const section = document.getElementById(id);
+            section.classList.add('active');
 
-            // Show current tab content
-            document.getElementById(tabId).classList.add('active');
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
 
-            // Set current tab button active
-            event.currentTarget.classList.add('active');
+            // Close sidebar on mobile
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.remove('expanded');
+            }
 
-            // Scroll back to top on tab change
+            // Smooth scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
