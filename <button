@@ -1600,7 +1600,31 @@ footer {
       <div id="quizResult" style="display:none; margin-top:20px;"></div>
     </div>
   </section>
+  <!-- ==================== ASK CHEMVAULT AI ==================== -->
+  <section id="ai" class="ai-section">
+    <div class="section-header">
+      <h2>Ask ChemVault AI</h2>
+      <p>Powered by Google Gemini. Ask any Class 10 Chemistry question – reactions, colours, definitions, exam tips, etc.</p>
+    </div>
 
+    <div class="ai-container">
+      <div class="ai-header">
+        <h2>ChemVault AI</h2>
+        <span class="ai-badge">Gemini 1.5 Flash</span>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message ai">
+          Hello! I am ChemVault AI. Ask me anything about Class 10 CBSE Chemistry – reactions, equations, colours, definitions, or exam tips.
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Ask a chemistry question..." autocomplete="off">
+        <button class="chat-send" id="chatSend">Send</button>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer>
