@@ -762,6 +762,7 @@ footer {
     <button class="nav-btn" data-section="definitions">Definitions</button>
     <button class="nav-btn" data-section="notes">Exam Notes</button>
     <button class="nav-btn" data-section="quiz">Quiz</button>
+    <button class="nav-btn" data-section="ai">Ask AI</button>
   </div>
 </nav>
 
