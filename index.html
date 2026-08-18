@@ -2601,7 +2601,7 @@ const reactions = [
     tip: "Basic combustion reaction of carbon.",
     desc: "Carbon burns in oxygen to form carbon dioxide."
   },
-  {
+ {
     ch: "ch4",
     title: "Oxidation of Ethanol to Ethanoic Acid",
     eq: "CH₃CH₂OH + 2[O] → CH₃COOH + H₂O",
@@ -2777,7 +2777,9 @@ const reactions = [
     tip: "Hydrophobic tail attaches to grease, hydrophilic head to water. Micelle formation is key.",
     desc: "Soap molecules form micelles that trap grease and dirt, which are then washed away by water."
   }
-];/* ========== RENDER ENGINE ========== */
+];
+
+/* ========== RENDER ENGINE ========== */
 const grid = document.getElementById('reactionGrid');
 const countEl = document.getElementById('reactionCount');
 let currentFilter = "all";
@@ -2818,33 +2820,15 @@ function renderReactions() {
 
 /* Search */
 document.getElementById('globalSearch').addEventListener('input', e => {
-  searchQuery = e.target.value;
-  renderReactions();
-});
+  searchQuery = e.target.value.trim();
+  currentFilter = 'all';
 
-/* Sticky nav filter */
-document.querySelectorAll('.nav-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const sec = btn.dataset.section;
-    if (sec === "ch1" || sec === "ch2" || sec === "ch3" || sec === "ch4") {
-      currentFilter = sec;
-      renderReactions();
-      document.getElementById('reactions').scrollIntoView({behavior:'smooth'});
-    } else if (sec === "all") {
-      currentFilter = "all";
-      renderReactions();
-    } else if (sec === "colours") {
-      document.getElementById('colours').scrollIntoView({behavior:'smooth'});
-    } else if (sec === "definitions") {
-      document.getElementById('definitions').scrollIntoView({behavior:'smooth'});
-    } else if (sec === "notes") {
-      document.getElementById('notes').scrollIntoView({behavior:'smooth'});
-    } else if (sec === "quiz") {
-      document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
-    }
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.section === 'all');
   });
+
+  renderReactions();
+  document.getElementById('reactions').scrollIntoView({ behavior: 'smooth' });
 });
 
 function filterChapter(ch) {
@@ -2853,7 +2837,7 @@ function filterChapter(ch) {
     b.classList.toggle('active', b.dataset.section === ch);
   });
   renderReactions();
-  document.getElementById('reactions').scrollIntoView({behavior:'smooth'});
+  document.getElementById('reactions').scrollIntoView({ behavior: 'smooth' });
 }
 
 /* Initial render */
@@ -3295,7 +3279,7 @@ function startQuiz(chapter) {
   document.getElementById('finishBtn').style.display = 'none';
 
   loadQuestion();
-  document.getElementById('quiz').scrollIntoView({behavior:'smooth'});
+  document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
 }
 
 function loadQuestion() {
@@ -3404,23 +3388,11 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   });
 });
 
-/* Global search also works when user is on other sections */
-document.getElementById('globalSearch').addEventListener('input', function(e) {
-  searchQuery = e.target.value.trim();
-  currentFilter = 'all';
-
-  document.querySelectorAll('.nav-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.section === 'all');
-  });
-
-  renderReactions();
-  document.getElementById('reactions').scrollIntoView({ behavior: 'smooth' });
-});
 /* ============================================================
-   CHEMVAULT AI – Gemini Integration
+   CHEMVAULT AI – Groq API Compatible Integration
    ============================================================ */
 
-const WORKER_URL = "https://solitary-recipe-311a.aryanbhai1729.workers.dev";  // ← Your Worker URL
+const WORKER_URL = "https://solitary-recipe-311a.aryanbhai1729.workers.dev"; // Your Cloudflare Worker URL
 
 const chatMessages = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatInput");
@@ -3457,7 +3429,11 @@ async function sendMessage() {
 
     const data = await res.json();
     loading.remove();
-    addMessage(data.reply || "No response received.", "ai");
+
+    // Supports both standard worker wrapper ({ reply: "..." }) 
+    // and raw Groq/OpenAI response formats ({ choices: [{ message: { content: "..." } }] })
+    const replyText = data.reply || data.choices?.[0]?.message?.content || "No response received.";
+    addMessage(replyText, "ai");
   } catch (err) {
     loading.remove();
     addMessage("Error connecting to AI. Please check your Worker URL or try again later.", "ai");
@@ -3467,12 +3443,14 @@ async function sendMessage() {
   chatInput.focus();
 }
 
-chatSend.addEventListener("click", sendMessage);
-chatInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendMessage();
-});
+if (chatSend) chatSend.addEventListener("click", sendMessage);
+if (chatInput) {
+  chatInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+}
 
-/* Make the new "Ask AI" nav button work */
+/* Make the "Ask AI" nav button work */
 document.querySelectorAll('.nav-btn').forEach(btn => {
   if (btn.dataset.section === "ai") {
     btn.addEventListener("click", () => {
@@ -3482,7 +3460,8 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     });
   }
 });
-console.log('%cChemVault 10 ready — All 4 chapters + Colours + Definitions + Notes + 80 Quiz Questions loaded.', 'color:#4f46e5; font-weight:bold; font-size:14px;');
+
+console.log('%cChemVault 10 ready — Groq AI, 4 Chapters, Quiz & Engine active.', 'color:#4f46e5; font-weight:bold; font-size:14px;');
 </script>
 </body>
 </html>
